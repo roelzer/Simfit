@@ -1,5 +1,10 @@
 # Offene Fragen
 
+## Antworten von Simon (2026-11-04)
+- E-1 Datenbank: „keine Ahnung“ → Empfehlung des Teams gilt. E-2 Betriebssystem des Freundes: **iOS** (iPhone) → lokaler Betrieb mit Docker entfällt, Web-App auf einem Server. E-3: **mit Benutzer**, gern Apple-ID oder Google-Konto. E-4: „keine Ahnung“ → Empfehlung (Einrichtungsseite) gilt. E-5: Updates unwichtig, „daten dürfen auf keinen fall verloren gehen“. E-6: **alles deutsch**.
+- Offen aus der Startfreigabe, ohne Antwort: Bilanz, Umfang, Zeitraum, Kontakt, Merge nach main, Freigabe `dev-team.json`, „Freigabe zum Bauen“ (noch nicht erteilt).
+- Folge: Plan wird neu gedacht (Hosting, Benutzerkonten, Anmeldung, Sicherung, deutsche Namen). Siehe neue Fragen H1–H4 unten.
+
 ## Fragen an Simon
 Alle mit Empfehlung; ohne Antwort gilt die Empfehlung (keine blockiert den Planabschluss).
 

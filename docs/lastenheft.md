@@ -25,6 +25,10 @@ Der Freund (ein Nutzer, eigenes Garmin-Konto), im Alltag, am Handy und am Rechne
 | A9 | (aus ANFORDERUNGEN.md) Garmin-Tokens statt Passwort, Backoff bei 429, Tokens verschlüsselt | Muss | Server loggt sich nie mit Passwort ein; Tokens nicht im Klartext, nicht im Repo; Test beweist Backoff mit aufgezeichneten Beispieldaten. |
 | A10 | (aus ANFORDERUNGEN.md) Datenschutz für Gesundheitsdaten | Muss | Daten bleiben bei dem Freund bzw. unter seiner Kontrolle; Löschen und Export möglich; keine Weitergabe an Dritte außer Open Food Facts (nur Suchbegriff/Barcode). |
 | A11 | „überprüf machbarkeit und aufwand“, „recherchier welche funktionen“ | erledigt | `docs/ANFORDERUNGEN.md` |
+| A12 | „gerne mit benutzer, vllt wenn möglich über apple id anmeldung oder google konto“ | Muss (Benutzerkonto), Soll (Apple/Google-Anmeldung) | Anmeldung mit eigenem Benutzerkonto; Anmeldung über Apple oder Google, soweit technisch und kostenmäßig machbar (Entscheidung Simon); ohne Anmeldung kein Zugriff auf Daten. |
+| A13 | „daten dürfen auf keinen fall verloren gehen“ | Muss | Regelmäßige Sicherung an einem zweiten Ort, einmal geprobte Wiederherstellung, Updates und Migrationen verlieren keine Daten (Sicherung vorher), „leer überschreibt nie“. |
+| A14 | „alles deutsch“ | Muss | Oberfläche, Fehlermeldungen, Anleitung und Bezeichner im Code (Tabellen, Felder, Funktionen) auf Deutsch, Einheit im Namen (z. B. `ruhepuls_bpm`). |
+| A15 | „e2 ios“ / „denke wird ja webapp, daher update kein großer stress“ | Muss | Der Freund nutzt die App auf dem iPhone im Browser (Web-App, auf dem Home-Bildschirm ablegbar); Updates passieren zentral, ohne dass er etwas tun muss. |
 
 ## 5. Rahmenbedingungen
 - Garmin: inoffizielle Bibliothek `garminconnect` (kann brechen, Rate Limits); offizielle API später, falls zugänglich.
