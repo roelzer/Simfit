@@ -25,3 +25,4 @@ Wird automatisch geschrieben. Jede Zeile: Zeit, Agent, was er bekommen bzw. geme
 | 2026-11-04 13:34 | ▶ | architekt | Architekt: Baupläne Gruppe C |
 | 2026-11-04 13:45 | ■ 🟡 | architekt | 🟡 Gelb – alle fünf Baupläne sind geschrieben: P5, P6, P7, P11, P13. Jede Rückfrage des Kritikers zu diesen Paketen ist beantwortet, eine Zeile je Rückf ([Bericht](docs/pruefberichte/20261104-134542-architekt-a957792bdb64eaec9.md)) |
 | 2026-11-04 13:45 | ■ 🟢 | architekt | 🟢 Teil A ist fertig. Die vier Baupläne P1b, P2, P3 und P4 liegen als Dateien vor. ARCHITEKTUR.md ist an den verlangten Stellen nachgezogen. Die Architekturt ([Bericht](docs/pruefberichte/20261104-134559-architekt-aa0ef148ea2c29a29.md)) |
+| 2026-11-04 13:47 | ■ 🟡 | architekt | 🟡 Architekt, Modus entwurf, Schritt 2 Teil C: **4 von 6 Bauplänen fertig. P12 und der Prüf-Schwerpunkt fehlen noch (Status BLOCKIERT, Grund: Kontext voll). ([Bericht](docs/pruefberichte/20261104-134733-architekt-afcd4cd53eadbb55e.md)) |
