@@ -12,3 +12,5 @@ Wird automatisch geschrieben. Jede Zeile: Zeit, Agent, was er bekommen bzw. geme
 | 2026-11-04 12:58 | ■ 🟡 | kritiker | 🟡 **Kritiker, Modus plan (mit Bauplan-Probe): Der Plan deckt alle Kernanforderungen ab und taugt als Gerüst. Vor dem Bau von M2 müssen aber drei Stellen ge ([Bericht](docs/pruefberichte/20261104-125800-kritiker-a1eef1076d3156e40.md)) |
 | 2026-11-04 12:58 | ▶ | rechercheur | Recherche Garmin, OFF, Lebensmittel |
 | 2026-11-04 12:58 | ▶ | sicherheitspruefer | Sicherheitsprüfung des Plans |
+| 2026-11-04 13:05 | ■ 🟡 | rechercheur | 🟡 Recherche geschrieben: /home/user/Simfit/fachwissen/recherche/simfit-grundlagen.md. Noch keine Gegenprüfung; die muss ein eigener Aufruf machen. Gelb, wei ([Bericht](docs/pruefberichte/20261104-130524-rechercheur-ad5d0207f0fadef30.md)) |
+| 2026-11-04 13:05 | ▶ | rechercheur | Gegenprüfung Recherche |
