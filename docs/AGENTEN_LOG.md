@@ -14,3 +14,4 @@ Wird automatisch geschrieben. Jede Zeile: Zeit, Agent, was er bekommen bzw. geme
 | 2026-11-04 12:58 | ▶ | sicherheitspruefer | Sicherheitsprüfung des Plans |
 | 2026-11-04 13:05 | ■ 🟡 | rechercheur | 🟡 Recherche geschrieben: /home/user/Simfit/fachwissen/recherche/simfit-grundlagen.md. Noch keine Gegenprüfung; die muss ein eigener Aufruf machen. Gelb, wei ([Bericht](docs/pruefberichte/20261104-130524-rechercheur-ad5d0207f0fadef30.md)) |
 | 2026-11-04 13:05 | ▶ | rechercheur | Gegenprüfung Recherche |
+| 2026-11-04 13:07 | ■ 🔴 | sicherheitspruefer | 🔴 **Sicherheitsprüfer, Modus plan: Den Plan bitte noch nicht so freigeben. Zwei Lücken müssen vorher ins Rückgrat (P1). Beide sind am Prototyp getestet,  ([Bericht](docs/pruefberichte/20261104-130736-sicherheitspruefer-a0e4bd15f95a9a0fb.md)) |
