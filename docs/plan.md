@@ -1,6 +1,6 @@
 # Plan: Simfit weiterbauen (Trainingsplan, Lebensmittelsuche, Sicherheit, Übergabe an Freund)
 
-**Stand:** 2026-11-04 · **Stufe:** Groß · **Profil:** web · **Besetzung:** Kunde (Empfehlung, wartet auf Simon) · **Status:** Entwurf
+**Stand:** 2026-11-04 · **Stufe:** Groß · **Profil:** web · **Besetzung:** Kunde (Empfehlung, wartet auf Simon) · **Status:** geprüft (Kritiker, Sicherheitsprüfer, Recherche mit Gegenprüfung), wartet auf Startfreigabe
 
 ## 1. Ziel
 Aus dem Prototyp wird eine übergabefertige App für den Freund: Garmin-Daten holen und zeigen (zuerst mit Demo-Daten), Kalorien tracken mit Open-Food-Facts-Suche, Trainingspläne erstellen und mit den Aktivitäten abgleichen, Gesundheitsdaten und Garmin-Tokens sicher halten, dazu Anleitung zur Inbetriebnahme. Echte Garmin-Zugangsdaten kommen erst am Ende, der Freund trägt sie selbst ein.
@@ -36,8 +36,8 @@ Baupläne: `docs/bauplaene/<Paket>.md`. Kritischer Pfad: P1a → P5 → P7 → P
 | **M3** | | | |
 | P7 | Garmin-Cloud-Quelle und Verdrahtung | P4, P5, P6 | P9, P10, P12, P13 |
 | P9 | Ernährung Backend (Basis-Lebensmittel aus USDA) | P1a, P3, PL-Vorarbeit (USDA-Liste) | P7, P10, P12, P13 |
-| P10 | Ernährung-Oberfläche | P1b, P2 | P7, P9, P12, P13 |
-| P12 | Trainingsplan-Oberfläche | P1b, P2 | P7, P9, P10, P13 |
+| P10 | Ernährung-Oberfläche | P1b, P2, P8 | P7, P9, P12, P13 |
+| P12 | Trainingsplan-Oberfläche | P1b, P2, P8, P11 | P7, P9, P10, P13 |
 | P13 | Datenschutz Backend (Export, Alles löschen) | P1a, P6 | P7, P9, P10, P12 |
 | **M4** | | | |
 | P14 | Betrieb und Auslieferung (Docker, Sicherung, Header/CSP, Wiederherstellung) | M3 | – |
