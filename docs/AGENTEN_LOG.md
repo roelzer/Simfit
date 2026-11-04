@@ -19,3 +19,4 @@ Wird automatisch geschrieben. Jede Zeile: Zeit, Agent, was er bekommen bzw. geme
 | 2026-11-04 13:09 | ▶ | architekt | Architekt: Rückgrat überarbeiten |
 | 2026-11-04 13:25 | ■ 🟡 | architekt | 🟡 **Architekt, Modus entwurf (Überarbeitung), Schritt 1 von 2: Das Rückgrat ist fertig.** Jeder Befund aus der Planprüfung hat jetzt eine Regel, wo mögli ([Bericht](docs/pruefberichte/20261104-132552-architekt-af4ade4fe2573e0f1.md)) |
 | 2026-11-04 13:26 | ▶ | architekt | Architekt: vollständige Baupläne |
+| 2026-11-04 13:34 | ■ 🔴 | architekt | 🔴 **Architekt, Modus entwurf, Schritt 2: nicht fertig. Mein Kontext war voll, bevor alle Baupläne geschrieben waren.** Fertig sind 2 von 18 Dateien: der Bau ([Bericht](docs/pruefberichte/20261104-133400-architekt-a89994b8605fce1ca.md)) |
