@@ -2,7 +2,7 @@
 
 Geführt vom Agenten `designer`. Werte (Farben, Schrift, Abstände, Radien, Schatten, Bewegung) stehen **nur** in `design/tokens.json`; diese Datei beschreibt, wie sie eingesetzt werden. Grundlage: Oberflächen-Standard des Dev-Teams (`wissen/oberflaeche.md`).
 
-**Stand:** 2026-11-04 · Modus `entwurf` · gilt für P2 (Grundlage), P8 (Heute, Aktivitäten, Einstellungen), P10 (Ernährung), P12 (Training)
+**Stand:** 2026-11-04 · Modus `entwurf`, nachgezogen nach der Planprüfung (kein Standardziel, Bilanz nullable/„bisher“, Abruf höchstens 90 Tage, Menge 0,5–5.000 g, „Training heute“ nur heute, USDA-Quellenangabe, OFF-Suche nur auf Knopf/Enter, Merkposten M1–M6 entschieden) · gilt für P2 (Grundlage), P8 (Heute, Aktivitäten, Einstellungen), P10 (Ernährung), P12 (Training)
 
 ---
 
@@ -53,7 +53,7 @@ Ruhepuls                               51 bpm
 - Text für Screenreader: „Heute 51 bpm. In deinen letzten 30 Tagen zwischen 47 und 60, Durchschnitt 53.“
 - Keine Farbe für gut oder schlecht, keine Pfeile mit Wertung.
 
-Die Messleiste kommt auch in der Wochenleiste im Training vor (geplant gegen absolviert) und in der Tagesübersicht der Ernährung (gegessen gegen Ziel). Sie ist das durchgehende Bildelement der App.
+Die Messleiste kommt auch in der Wochenleiste im Training vor (geplant gegen absolviert) und in der Tagesübersicht der Ernährung (gegessen gegen Ziel – **nur, wenn ein Ziel gespeichert ist**; es gibt kein Standardziel). Sie ist das durchgehende Bildelement der App.
 
 ---
 
@@ -165,7 +165,7 @@ Solange keine Garmin-Verbindung besteht (`/health` → `source: "demo"`), steht 
 | `aborted` | „Letzte Aktualisierung wurde unterbrochen (z. B. weil Simfit beendet wurde).“ | „Erneut versuchen“ |
 
 - Uhrzeit aus `next_attempt_after` in Ortszeit. Liegt sie nicht am selben Tag, steht dort „morgen, 08:10 Uhr“ bzw. „am Do, 6. Nov., 08:10 Uhr“.
-- Antwortet `POST /sync` mit 429, erscheint derselbe Text wie bei `rate_limited` mit der Uhrzeit aus der Antwort. Fehlt die Uhrzeit, steht dort „Bitte später erneut versuchen.“
+- Antwortet `POST /sync` (oder `POST /garmin/connection`) mit 429, erscheint derselbe Text wie bei `rate_limited` mit der Uhrzeit aus `retry_after` der Fehlerantwort (M3). Fehlt die Uhrzeit, steht dort „Bitte später erneut versuchen.“
 - `rate_limited` und `auth_required` erscheinen zusätzlich als Band oben auf „Heute“ (wie 5.1, aber `warning`). So sieht der Nutzer den Grund, ohne den Sync-Block zu suchen.
 - Ist der Lauf fertig, erscheint ein Toast „Daten aktualisiert“ und die Ansichten laden neu.
 
@@ -178,7 +178,7 @@ Solange keine Garmin-Verbindung besteht (`/health` → `source: "demo"`), steht 
 | Auswahl | `Select`, `ToggleGroup` | Zeitraum 14/30 Tage, Sportart, Mahlzeit | Fokus, Tastatur (Pfeiltasten) |
 | Karte | `Card` | Standard (Linie, kein Schatten) | – |
 | Kennzahl-Zeile | eigen (`components/dashboard/MetricRow`) | mit oder ohne Messleiste, mit Mini-Verlauf | gefüllt, ohne Wert („–“ und „Heute noch kein Wert“), lädt (Skeleton), zu wenig Vergleich |
-| Messleiste | eigen (`components/common/Gauge`) | Kennzahl (Min–Ø–Heute), Ziel (gegessen/Ziel), Woche (absolviert/geplant) | normal, über dem Ziel (Spanne läuft über die Zielmarke hinaus, Text „120 kcal über Ziel“ in `warning`), zu wenig Daten |
+| Messleiste | eigen (`components/common/Gauge`) | Kennzahl (Min–Ø–Heute), Ziel (gegessen/Ziel; nur mit gespeichertem Ziel), Woche (absolviert/geplant) | normal, über dem Ziel (Spanne läuft über die Zielmarke hinaus, Text „120 kcal über Ziel“ in `warning`), zu wenig Daten |
 | Status-Plakette | `Badge` | Erledigt (`success`, `CheckCircle2`), Verpasst (`destructive`, `XCircle`), Heute (`primary`, `CircleDot`), Geplant (neutral, `Circle`), Zusätzlich (neutral, `Plus`) | **immer Symbol + Text**, nie nur Farbe |
 | Hinweisband | `Alert` | info (neutral), warning, destructive, success | mit Aktion (Link/Knopf), schließbar oder fest |
 | Dialog | `Dialog`, `AlertDialog` | Formular, Bestätigung, Gefahr | Fokus fängt im Dialog, `Esc` schließt (außer während des Speicherns), Fokus kehrt zum Auslöser zurück |
@@ -190,7 +190,8 @@ Solange keine Garmin-Verbindung besteht (`/health` → `source: "demo"`), steht 
 | Leerzustand | eigen (`components/common/EmptyState`) | – | linksbündig: Symbol 24, Titel (section), ein Satz, **eine** Aktion. Nicht zentriert |
 | Fehlerzustand | eigen (`components/common/ErrorState`) | Laden fehlgeschlagen, nicht gefunden | Titel, Meldung des Servers (`detail`), Ausweg („Erneut versuchen“ und/oder Link) |
 | Diagramm | shadcn `Chart` (Recharts) | Linie+Fläche, Band, Balken (Woche) | lädt (Skeleton), zu wenig Daten (< 2 Punkte: Text statt Diagramm), Lücken |
-| OFF-Hinweis | eigen (`components/nutrition/OffAttribution`) | unter Suchergebnissen, Fußzeile | fest, nicht schließbar (siehe 6.4) |
+| OFF-Hinweis | eigen (`components/nutrition/OffAttribution`) | unter OFF-Suchergebnissen (nur wenn welche angezeigt werden), Fußzeile der Ernährung | fest, nicht schließbar (siehe 6.4) |
+| Quellen-Fußzeile | eigen (`components/nutrition/SourceFooter`) | Ernährung, Seitenende | OFF-Hinweis mit Links **und** „Basis-Lebensmittel: USDA FoodData Central (gemeinfrei, CC0)“ als Text **ohne Link** |
 
 ### 5.4 Allgemeine Fehlertexte
 
@@ -224,7 +225,7 @@ Desktop 1440:
 │ Training   │ ┌─ Erholung & Bewegung ─────────────────────┐ ┌─ Ernährung heute ──────┐ │
 │ Einstellung│ │ Schlaf        5 h 48 min  ├──●──┼────┤  ~~~│ │ 1.420 von 2.200 kcal   │ │
 │            │ │ Body Battery  6 – 79      ├────┼──●─┤  ~~~│ │ ▮▮▮▮▮▮▮▮▯▯▯▯           │ │
-│            │ │ Ruhepuls      51 bpm      ├──●─┼────┤  ~~~│ │ Verbrauch 2.495 kcal   │ │
+│            │ │ Ruhepuls      51 bpm      ├──●─┼────┤  ~~~│ │ Verbrauch bisher 2.495 │ │
 │            │ │ HRV           69 ms       ├────┼─●──┤  ~~~│ │ [Mahlzeit eintragen]   │ │
 │            │ │ Stress        22          ├─●──┼────┤  ~~~│ ├─ Training heute ───────┤ │
 │            │ │ Schritte      13.076      ├────┼───●┤  ~~~│ │ [Fuß] Locker. Dauerlauf│ │
@@ -285,7 +286,7 @@ Am Handy entfällt der Mini-Verlauf (Messleiste reicht), die Werte an den Enden 
 
 | Zustand | Desktop | Handy |
 |---|---|---|
-| Erster Start (keine Daten, nie synchronisiert) | Statt Kennzahlen eine Karte **„Willkommen bei Simfit“**, linksbündig als Schrittliste: ① „Mit Garmin verbinden“ [Verbinden] · ② „Oder erst mit Beispieldaten ausprobieren“ [Beispieldaten laden] (startet Sync mit Demo-Quelle) · ③ „Kalorienziel festlegen“ → Ernährung · ④ „Trainingsplan anlegen“ → Training. Erledigte Schritte bekommen `CheckCircle2` und „erledigt“. | gleich, eine Spalte |
+| Erster Start (keine Daten, nie synchronisiert) | Statt Kennzahlen eine Karte **„Willkommen bei Simfit“**, linksbündig als Schrittliste: ① „Mit Garmin verbinden“ [Verbinden] · ② „Oder erst mit Beispieldaten ausprobieren“ [Beispieldaten laden] (startet Sync mit Demo-Quelle) · ③ „Kalorienziel festlegen“ → Ernährung · ④ „Trainingsplan anlegen“ → Training. Erledigte Schritte bekommen `CheckCircle2` und „erledigt“. Schritt ③ gilt als erledigt, sobald ein Ziel gespeichert ist (`goal !== null`); es gibt **kein Standardziel**. Schritt ② entfällt, wenn früher schon mit Garmin verbunden war (Demo wird dann nie geladen, M1). | gleich, eine Spalte |
 | Lädt | Skeleton: 6 Zeilen in der Kennzahlkarte, Kartenrahmen rechts, Diagrammfläche. Der Kopf mit Datum ist sofort da. | gleich |
 | Gefüllt | wie Skizze | wie Skizze |
 | Heute noch kein Wert (Uhr noch nicht synchronisiert) | Zeile zeigt „–“ und klein „Heute noch kein Wert · gestern 5 h 12 min“. Die Messleiste zeigt dann keinen Punkt. | gleich |
@@ -295,8 +296,12 @@ Am Handy entfällt der Mini-Verlauf (Messleiste reicht), die Werte an den Enden 
 | Rate-Limit / Anmeldung nötig | Band oben (5.2) | gleich, Text bricht um |
 | Fehler beim Laden | Je Karte eigener Fehlerzustand: Bricht nur der Verlauf, bleiben die Kennzahlen stehen. Text 5.4 + „Erneut versuchen“. | gleich |
 | Kein Trainingsplan | Karte „Training heute“: „Kein Plan angelegt.“ + Link „Plan anlegen“ | gleich |
-| Heute nichts geplant | „Heute ist nichts geplant.“ + nächste Einheit „Als Nächstes: Fr, Intervalle 40 min“ | gleich |
-| Kein Ernährungsziel / nichts gegessen | „Noch nichts eingetragen.“ + [Mahlzeit eintragen]; ohne Ziel: Messleiste ausgeblendet, Text „Ziel festlegen“ | gleich |
+| Heute nichts geplant | „Heute ist nichts geplant.“ (Karte zeigt **nur den heutigen Tag**, keine Zeile „Als Nächstes …“; Quelle `GET /training/today`, M6) | gleich |
+| Training heute gefüllt | je Einheit Sportart-Symbol, Titel, Dauer, Status-Plakette (meist „Heute“, nach Abhaken „Erledigt“) + „Zum Trainingsplan →“ | gleich |
+| Kein Ernährungsziel (`goal === null`) | Zeile „1.420 kcal gegessen“ **ohne** Messleiste „Ziel“ und ohne „von … kcal“; darunter Link „Ziel festlegen“ (→ `/nutrition`) | gleich |
+| Nichts gegessen | „Noch nichts eingetragen.“ + [Mahlzeit eintragen]; mit Ziel bleibt die Messleiste bei 0 | gleich |
+| Verbrauch laufender Tag (`burned_partial`) | „Verbrauch bisher 2.495 kcal“ (Wert wächst bis Tagesende) | gleich |
+| Kein Garmin-Verbrauch (`burned_kcal === null`) | „Kein Verbrauch von Garmin“, keine Bilanz | gleich |
 
 ### 6.2 Aktivitäten (`/activities`) – A2
 
@@ -383,9 +388,9 @@ Desktop 1440:
 Ernährung                                   [‹]  Mittwoch, 4. November  [›]  [Heute]
 ┌─ Tagesübersicht ──────────────────────────────────────────────┐ ┌─ Bilanz ─────────────┐
 │ 1.420 von 2.200 kcal                     noch 780 kcal         │ │ Gegessen   1.420 kcal│
-│ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯▯▯▯▯ │ Ziel                           │ │ Verbrauch  2.495 kcal│
-│ Eiweiß   82 / 130 g   ▮▮▮▮▮▮▯▯▯                               │ │ (laut Garmin)        │
-│ Kohlenh. 160 / 250 g  ▮▮▮▮▮▮▯▯▯                               │ │ Bilanz   −1.075 kcal │
+│ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯▯▯▯▯ │ Ziel                           │ │ Verbrauch bisher     │
+│ Eiweiß   82 / 130 g   ▮▮▮▮▮▮▯▯▯                               │ │ (laut Garmin) 2.495  │
+│ Kohlenh. 160 / 250 g  ▮▮▮▮▮▮▯▯▯                               │ │ Bilanz bisher −1.075 │
 │ Fett     48 / 70 g    ▮▮▮▮▮▮▮▯▯              [Ziel ändern]    │ │ unter dem Verbrauch  │
 └───────────────────────────────────────────────────────────────┘ └──────────────────────┘
 ┌─ Frühstück · 520 kcal ──────────────────────────────── [+ Hinzufügen] ┐
@@ -398,8 +403,9 @@ Ernährung                                   [‹]  Mittwoch, 4. November  [›]
 └──────────────────────────────────────────────────────────────────────┘
 … Abendessen, Snacks
 Lebensmitteldaten teilweise von Open Food Facts, Lizenz ODbL.  openfoodfacts.org · Lizenz
+Basis-Lebensmittel: USDA FoodData Central (gemeinfrei, CC0)
 ```
-(`[Mül]` steht in der Skizze für das Lucide-Symbol `Trash2`.) Mengen gibt es nur in **g** (API `amount_g`), auch bei Getränken – Merkposten M5 in Abschnitt 9.
+(`[Mül]` steht in der Skizze für das Lucide-Symbol `Trash2`.) Die Skizze zeigt den laufenden Tag, deshalb „bisher“. Mengen gibt es nur in **g** (API `amount_g`, 0,5–5.000 g), auch bei Getränken – entschieden, M5 in Abschnitt 9.
 
 Handy 390:
 ```
@@ -411,8 +417,8 @@ Ernährung
 │ Eiweiß    82/130 g ▮▮▮▮▯▯    │
 │ Kohlenh. 160/250 g ▮▮▮▮▯▯    │
 │ Fett      48/70 g  ▮▮▮▮▮▯    │
-│ Verbrauch (Garmin) 2.495 kcal│
-│ Bilanz −1.075 kcal [Ziel änd.]│
+│ Verbrauch bisher   2.495 kcal│
+│ Bilanz bisher −1.075 [Ziel ä.]│
 └──────────────────────────────┘
 ┌ Frühstück · 520 kcal  [+ ]──┐
 │ Haferflocken, kernig 297 kcal│
@@ -420,20 +426,25 @@ Ernährung
 └──────────────────────────────┘
 …
 Daten teilw. von Open Food Facts (ODbL)
+Basis: USDA FoodData Central (CC0)
 ├──── Tab-Leiste ──────────────┤
 ```
 Am Handy rutscht die Bilanz in die Tagesübersicht. „+ Hinzufügen“ ist ein Knopf 44 × 44 mit Symbol `Plus` und `aria-label="Zu Frühstück hinzufügen"`.
 
-**Bilanz ohne Wertung:** Die Bilanz bekommt **keine** grüne oder rote Farbe, weil sie je nach Ziel (abnehmen, halten, zunehmen) anders zu lesen ist. Darunter steht nur Text: „unter dem Verbrauch“ bzw. „über dem Verbrauch“. Über dem Kalorienziel: Die Messleiste läuft über die Zielmarke hinaus, der Text „120 kcal über Ziel“ steht in `warning`.
+**Bilanz ohne Wertung:** Die Bilanz bekommt **keine** grüne oder rote Farbe, weil sie je nach Ziel (abnehmen, halten, zunehmen) anders zu lesen ist. Darunter steht nur Text: „unter dem Verbrauch“ bzw. „über dem Verbrauch“.
+
+**Bilanz nur mit Garmin-Verbrauch:** Liegt für den Tag kein Verbrauch von Garmin vor (`burned_kcal` und `balance_kcal` sind `null`), zeigt die Bilanz-Karte „–“ und den Satz „Für diesen Tag liegt kein Verbrauch von Garmin vor.“ Das Ziel wird **nie** als Ersatz für den Verbrauch gerechnet. Am laufenden Tag (`burned_partial`) heißt es „Verbrauch bisher (laut Garmin)“ und „Bilanz bisher“, weil der Wert bis zum Abend wächst. An abgeschlossenen Tagen: „Verbrauch (laut Garmin)“ und „Bilanz“. Über dem Kalorienziel: Die Messleiste läuft über die Zielmarke hinaus, der Text „120 kcal über Ziel“ steht in `warning`.
 
 **Ablauf „Lebensmittel hinzufügen“** (Desktop Sheet rechts, Handy Drawer von unten):
 ```
 ┌ Zu Frühstück hinzufügen                      [x] ┐
 │ ([Lupe] Lebensmittel oder Barcode suchen  )       │
-│ Mindestens 2 Zeichen                              │
+│ Barcode eintippen geht auch                       │
 │ DEINE LEBENSMITTEL                                │
-│  Haferflocken, kernig       370 kcal/100 g        │
+│  Haferflocken, kernig       370 kcal/100 g  USDA  │
 │  Skyr Natur · Arla          63 kcal/100 g  OFF    │
+│ [Auch bei Open Food Facts suchen]  (oder Enter)   │
+│        ↓ erst nach Klick bzw. Enter               │
 │ OPEN FOOD FACTS                                   │
 │  Haferdrink Barista · Oatly 59 kcal/100 g         │
 │  …                                                │
@@ -444,38 +455,47 @@ Am Handy rutscht die Bilanz in die Tagesübersicht. „+ Hinzufügen“ ist ein 
         ↓ Auswahl
 ┌ ← Haferflocken, kernig                       [x] ┐
 │ Menge                                             │
-│ (  80  ) g    [50 g][100 g][150 g]                │
+│ Menge (g)                                         │
+│ (  80  ) g    [50 g][100 g][150 g][200 g]         │
 │ 297 kcal · Eiweiß 11 g · KH 47 g · Fett 5 g       │
 │ Mahlzeit (Frühstück ▾)                            │
 │                         [Zu Frühstück hinzufügen] │
 └───────────────────────────────────────────────────┘
 ```
-- Das Suchfeld bekommt beim Öffnen den Fokus. Die Suche startet 300 ms nach der letzten Eingabe. Lokale Treffer erscheinen sofort, Open Food Facts lädt darunter mit eigenem Skeleton (3 Zeilen).
-- Reine Ziffern mit 8–14 Stellen gelten als Barcode (`/foods/barcode/{code}`). Hinweis im Feld: „Barcode eintippen geht auch“.
+- Das Suchfeld bekommt beim Öffnen den Fokus. **Nur die eigene Suche** (Daten bleiben im Gerät) startet 300 ms nach der letzten Eingabe ab 2 Zeichen.
+- **Open Food Facts nur auf ausdrückliche Aktion:** Knopf [Auch bei Open Food Facts suchen] (`outline`, unter den eigenen Treffern, voll breit am Handy) oder `Enter` im Suchfeld. **Nie** bei einer Tipppause – der Suchbegriff geht erst auf Wunsch an einen fremden Dienst. Danach lädt die Gruppe „Open Food Facts“ mit eigenem Skeleton (3 Zeilen), der Knopf ist währenddessen gesperrt und zeigt `Loader2` + „Suche bei Open Food Facts …“. Tippt man weiter, wird die laufende Online-Suche abgebrochen und die OFF-Gruppe verschwindet, bis erneut Knopf/Enter kommt.
+- Unter dem Knopf klein (`caption`): „Dein Suchbegriff wird dafür an Open Food Facts geschickt.“
+- Reine Ziffern mit 8–14 Stellen gelten als Barcode: **kein** Suchlauf beim Tippen, Hinweis unter dem Feld „Barcode erkannt – mit Enter suchen“; erst `Enter` bzw. der Knopf (dann beschriftet [Barcode suchen]) ruft `/foods/barcode/{code}` auf. Hinweis im leeren Feld: „Barcode eintippen geht auch“.
+- Eigene Treffer tragen ihre Herkunft als kleine Textmarke rechts: „USDA“ (Basis-Lebensmittel), „OFF“ (importiert), nichts bei eigenen.
 - Ein OFF-Treffer wird beim Auswählen importiert (`POST /foods/import`); währenddessen zeigt die Zeile `Loader2`.
-- **OFF-Hinweis (AE-10):** Unter der Gruppe „Open Food Facts“ steht immer der Text „Daten von Open Food Facts, Lizenz ODbL“ mit zwei Links (openfoodfacts.org, opendatacommons.org/licenses/odbl). Einträge im Tagebuch mit `food_origin = off` tragen die Plakette „Open Food Facts“. Die Fußzeile der Seite zeigt den Hinweis immer. **Keine Produktbilder** (AE-12).
+- **OFF-Hinweis (AE-10) nur dort, wo OFF-Daten erscheinen:** Unter der Gruppe „Open Food Facts“ (also sobald OFF-Treffer oder ein Barcode-Treffer von OFF angezeigt werden) steht der Text „Daten von Open Food Facts, Lizenz ODbL“ mit zwei Links (openfoodfacts.org, opendatacommons.org/licenses/odbl). Ohne OFF-Treffer kein Hinweis im Sheet. Einträge im Tagebuch mit `food_origin = off` tragen die Plakette „Open Food Facts“. Die Fußzeile der Ernährungsseite zeigt den OFF-Hinweis immer (das Tagebuch kann jederzeit OFF-Einträge enthalten). **Keine Produktbilder** (AE-12).
+- **USDA-Quellenangabe:** Basis-Lebensmittel stammen aus USDA FoodData Central (gemeinfrei, CC0). Angabe als **reiner Text ohne Link** in der Fußzeile: „Basis-Lebensmittel: USDA FoodData Central (gemeinfrei, CC0)“ und als Textmarke „USDA“ an den Treffern. Fremde Links gibt es nur zu `openfoodfacts.org` und `opendatacommons.org`.
 - Rückmeldung: Nach dem Hinzufügen schließt das Sheet, Toast „Haferflocken zu Frühstück hinzugefügt“, die Zeile erscheint in der Mahlzeit und ist für 1 s mit `primary-soft` hinterlegt (bei reduzierter Bewegung ohne Übergang).
 - Löschen eines Eintrags: Symbolknopf `Trash2` (44 px, `aria-label="Haferflocken löschen"`). Die Zeile verschwindet sofort, Toast „Haferflocken entfernt“ mit [Rückgängig] (legt den Eintrag neu an). Hat der Eintrag kein Lebensmittel mehr (`food_id` leer), gibt es kein Rückgängig: Vorher fragt ein AlertDialog „Eintrag löschen?“.
 
 | Zustand | Inhalt |
 |---|---|
-| Erster Start (kein Ziel) | Band `info`: „Lege ein Tagesziel fest, dann siehst du, wie viel noch fehlt.“ [Ziel festlegen]; Übersicht zeigt nur „1.420 kcal gegessen“ ohne Messleiste |
-| Leerer Tag | Übersicht mit 0 von 2.200 kcal; jede Mahlzeit „Noch nichts eingetragen.“ |
+| Kein Ziel (`goal === null`, auch nach „Alles löschen“; es gibt kein Standardziel) | Band `info`: „Lege ein Tagesziel fest, dann siehst du, wie viel noch fehlt.“ [Ziel festlegen] (öffnet den Ziel-Dialog, Felder leer); Übersicht zeigt nur „1.420 kcal gegessen“ und die Makros in Gramm, **ohne** Messleiste „Ziel“, ohne „noch … kcal“ und ohne Makro-Ziele. Knopf „Ziel ändern“ heißt hier „Ziel festlegen“ |
+| Leerer Tag | mit Ziel: „0 von 2.200 kcal“; ohne Ziel: „0 kcal gegessen“; jede Mahlzeit „Noch nichts eingetragen.“ |
 | Lädt | Skeleton Übersicht + 4 Mahlzeitkarten mit Kopf |
 | Gefüllt | wie Skizze |
 | Viele Einträge (> 8 je Mahlzeit) | alle anzeigen, Kopf der Mahlzeit mit Summe bleibt oben; kein Paging nötig (ein Tag) |
-| Kein Garmin-Verbrauch | Bilanz „–“ und Text „Für diesen Tag liegt kein Verbrauch von Garmin vor.“ |
+| Kein Garmin-Verbrauch (`burned_kcal`/`balance_kcal` `null`) | Bilanz „–“ und Text „Für diesen Tag liegt kein Verbrauch von Garmin vor.“ (auch an künftigen Tagen und im Demo ohne Verbrauch) |
+| Laufender Tag (`burned_partial`) | „Verbrauch bisher (laut Garmin)“, „Bilanz bisher“ |
 | Zukünftiger Tag | erlaubt (Planen), Kopf zeigt Plakette „Zukunft“ |
 | Suche: weniger als 2 Zeichen | „Mindestens 2 Zeichen eingeben.“ |
-| Suche: nichts gefunden | „Nichts gefunden für ‚Haferdrinkk‘. Prüfe die Schreibweise oder lege es selbst an.“ [Eigenes Lebensmittel anlegen] (Name vorbelegt) |
+| Suche: nur eigene Treffer (OFF noch nicht gefragt) | eigene Treffer + Knopf [Auch bei Open Food Facts suchen]; kein OFF-Hinweis |
+| Suche: OFF lädt | 3 Skeleton-Zeilen unter „Open Food Facts“, Knopf gesperrt „Suche bei Open Food Facts …“ |
+| Barcode getippt | „Barcode erkannt – mit Enter suchen“, kein automatischer Aufruf |
+| Suche: nichts gefunden | lokal ohne Treffer: „Nichts in deinen Lebensmitteln für ‚Haferdrinkk‘.“ + [Auch bei Open Food Facts suchen]; nach der OFF-Suche ohne Treffer: „Nichts gefunden für ‚Haferdrinkk‘. Prüfe die Schreibweise oder lege es selbst an.“ [Eigenes Lebensmittel anlegen] (Name vorbelegt) |
 | Suche: OFF nicht erreichbar (`online_error`) | lokale Treffer bleiben; unter „Open Food Facts“: Band `warning`: „Open Food Facts ist gerade nicht erreichbar. Deine eigenen Lebensmittel findest du trotzdem.“ [Erneut suchen] |
 | Suche: OFF-Grenze erreicht | Meldung des Servers, z. B. „Zu viele Suchen in kurzer Zeit. Bitte eine Minute warten.“ |
 | Barcode unbekannt | „Zu diesem Barcode kennt weder Simfit noch Open Food Facts ein Produkt.“ [Eigenes Lebensmittel anlegen] (Barcode vorbelegt) |
-| Menge ungültig | unter dem Feld: „Bitte eine Menge zwischen 1 und 5.000 g eingeben.“ |
+| Menge ungültig (unter 0,5 g, über 5.000 g, leer, keine Zahl) | unter dem Feld: „Bitte eine Menge zwischen 0,5 und 5.000 g eingeben.“ Komma erlaubt („12,5“) |
 | Speichern fehlgeschlagen | Sheet bleibt offen, Meldung über dem Knopf, Menge bleibt erhalten |
 | Langer Lebensmittelname | 2 Zeilen, dann „…“; Marke in `muted-foreground` |
 
-**Ziel ändern** (Dialog): Felder „Kalorien pro Tag (kcal)“, „Eiweiß (g)“, „Kohlenhydrate (g)“, „Fett (g)“; Hinweis klein: „Rechnung zur Kontrolle: Makros ergeben 2.170 kcal“ (4/4/9 kcal pro g, nur Info, keine Pflicht). Fehler: „Bitte eine ganze Zahl ab 0 eingeben.“ Rückmeldung: Toast „Ziel gespeichert“.
+**Ziel ändern** (Dialog): Felder „Kalorien pro Tag (kcal)“, „Eiweiß (g)“, „Kohlenhydrate (g)“, „Fett (g)“; Hinweis klein: „Rechnung zur Kontrolle: Makros ergeben 2.150 kcal“ (bei 130 / 250 / 70 g; 4/4/9 kcal pro g, nur Info, keine Pflicht). Ohne gespeichertes Ziel heißt der Dialog „Ziel festlegen“ und alle Felder sind leer (kein Vorschlagswert). Fehler: „Bitte eine ganze Zahl ab 0 eingeben.“ Rückmeldung: Toast „Ziel gespeichert“.
 
 **Eigenes Lebensmittel** (Dialog bzw. zweiter Schritt im Sheet): Name*, Marke, Barcode, kcal/100 g*, Eiweiß*, Kohlenhydrate*, Fett* (alles pro 100 g; Komma erlaubt). Fehler je Feld: „Bitte eine Zahl angeben, z. B. 12,5.“ Nach dem Anlegen geht es direkt zum Mengenschritt.
 
@@ -575,7 +595,7 @@ Einstellungen
 │ Zuletzt aktualisiert: heute, 12:40 Uhr · Erfolgreich         │
 │ Simfit holt automatisch alle 6 Stunden neue Daten, solange   │
 │ es läuft.                                                    │
-│ Zeitraum (Letzte 30 Tage ▾)                 [Jetzt holen]     │
+│ Zeitraum (Letzte 30 Tage ▾)  höchstens 90   [Jetzt holen]     │
 └───────────────────────────────────────────────────────────────┘
 ┌─ Deine Daten ──────────────────────────────────────── #daten ┐
 │ Daten exportieren                                            │
@@ -583,15 +603,17 @@ Einstellungen
 │ Ohne Garmin-Passwort und ohne Schlüssel.   [Export herunterladen]
 │ ──────────────────────────────────────────────────────────── │
 │ Alles löschen                                                │
-│ Entfernt alle gespeicherten Daten aus Simfit.  [Alles löschen…]
+│ Entfernt alle deine Daten, die Garmin-Anmeldung und die      │
+│ Sicherungen aus Simfit.                       [Alles löschen…]
 └───────────────────────────────────────────────────────────────┘
 ┌─ Über Simfit ────────────────────────────────────────────────┐
-│ Version 1.0 · Lebensmitteldaten: Open Food Facts (ODbL) ↗    │
+│ Lebensmitteldaten: Open Food Facts (ODbL) ↗                  │
+│ Basis-Lebensmittel: USDA FoodData Central (gemeinfrei, CC0)  │
 │ Schrift: Geist (SIL OFL) · Simfit gibt keine medizinischen    │
 │ Ratschläge.                                                  │
 └───────────────────────────────────────────────────────────────┘
 ```
-Handy: dieselben Karten in voller Breite. Knöpfe stehen unter dem Text und sind voll breit.
+Handy: dieselben Karten in voller Breite. Knöpfe stehen unter dem Text und sind voll breit. „Über Simfit“ zeigt keine Versionsnummer, solange es keine Versionsquelle gibt; die USDA-Angabe ist Text ohne Link.
 
 **Ablauf „Mit Garmin verbinden“** (in der Karte, kein Seitenwechsel):
 
@@ -602,7 +624,7 @@ Handy: dieselben Karten in voller Breite. Knöpfe stehen unter dem Text und sind
 2. Senden: Knopf zeigt `Loader2` + „Verbinde mit Garmin …“, Felder gesperrt. Das kann bis zu 30 s dauern, ab 5 s erscheint darunter „Garmin braucht manchmal etwas länger.“
 3. Antwort `mfa_required` → Schritt 2 in derselben Karte, Schrittanzeige „Schritt 2 von 2“:
    „Garmin hat dir einen Bestätigungscode geschickt (per E-Mail oder in der Garmin-App).“ Feld „Code“ (6 Ziffern, `inputMode="numeric"`, `autoComplete="one-time-code"`, Fokus darauf). [Bestätigen] · [Abbrechen]
-4. Antwort `connected` → Karte zeigt Erfolg (Band `success`, `CheckCircle2`): „Verbunden mit Garmin. Simfit holt jetzt deine Daten der letzten 30 Tage.“ Der Sync startet (`POST /sync {range_days: 30}`), und der Status ist im Abschnitt „Daten holen“ sichtbar. Das Demo-Band verschwindet.
+4. Antwort `connected` → Karte zeigt Erfolg (Band `success`, `CheckCircle2`): „Verbunden mit Garmin. Simfit holt jetzt deine Daten der letzten 30 Tage.“ Der erste Abruf über 30 Tage startet einmal (M4: ausgelöst von der Oberfläche mit `POST /sync {range_days: 30}`, das Backend startet beim Verbinden selbst keinen), der Status ist im Abschnitt „Daten holen“ sichtbar. Das Demo-Band verschwindet.
 5. Verbunden-Zustand der Karte: „✓ Verbunden“ (Plakette `success`) · „Simfit holt Daten aus deinem Garmin-Konto.“ · [Verbindung trennen] (outline).
 
 **Fehlertexte der Verbindung**
@@ -618,9 +640,9 @@ Handy: dieselben Karten in voller Breite. Knöpfe stehen unter dem Text und sind
 
 Nach einem Fehler wird das Passwortfeld geleert, die E-Mail bleibt stehen.
 
-**Verbindung trennen** (AlertDialog): „Verbindung zu Garmin trennen? Simfit löscht die gespeicherte Anmeldung und holt keine neuen Daten mehr. Bereits geholte Werte bleiben erhalten.“ [Abbrechen] [Trennen]. Siehe Merkposten M1 in Abschnitt 9: Der Satz „bleiben erhalten“ muss technisch stimmen.
+**Verbindung trennen** (AlertDialog): „Verbindung zu Garmin trennen? Simfit löscht die gespeicherte Anmeldung und holt keine neuen Daten mehr. Bereits geholte Werte bleiben erhalten.“ [Abbrechen] [Trennen]. Der Satz „bleiben erhalten“ ist durch M1 gesichert: Beispieldaten überschreiben nie Garmin-Daten, und nach einer ersten Verbindung lädt Simfit keine Beispieldaten mehr (Karte zeigt dann „Nicht verbunden“ statt Demo).
 
-**Daten holen:** Zeitraum (Select): Letzte 7 Tage / 30 Tage / 90 Tage / 1 Jahr. Bei „1 Jahr“ steht darunter: „Dauert einige Minuten. Garmin bremst manchmal bei großen Abrufen – Simfit wartet dann automatisch.“ Status und Sperre wie 5.2.
+**Daten holen:** Zeitraum (Select): Letzte 7 Tage / 30 Tage / 90 Tage (Standard 30; **höchstens 90 Tage**, eine Auswahl „1 Jahr“ gibt es nicht – das schont das Garmin-Konto). Unter dem Select klein: „Simfit holt höchstens die letzten 90 Tage.“ Bei „90 Tage“ zusätzlich: „Dauert einige Minuten. Garmin bremst manchmal bei großen Abrufen – Simfit wartet dann automatisch.“ Status und Sperre wie 5.2.
 
 **Export:** [Export herunterladen] → Knopf `Loader2` „Export wird erstellt …“ → Browser lädt `simfit-export-2026-11-04.zip` herunter → Toast „Export gespeichert – du findest ihn in deinem Download-Ordner.“ Fehler: „Der Export konnte nicht erstellt werden. Versuche es erneut.“
 
@@ -631,7 +653,12 @@ Nach einem Fehler wird das Passwortfeld geleert, die E-Mail bleibt stehen.
 │ • alle Tageswerte und Aktivitäten                 │
 │ • alle Mahlzeiten, eigenen Lebensmittel und Ziele │
 │ • alle Trainingspläne                             │
-│ Dein Garmin-Konto selbst bleibt unberührt.        │
+│ • die Garmin-Anmeldung und die Sicherungen        │
+│   in Simfit                                       │
+│ Die Basis-Lebensmittel (USDA) bleiben verfügbar.  │
+│ Heruntergeladene Exporte und deine Daten bei      │
+│ Garmin bleiben. Exporte im Download-Ordner        │
+│ löschst du bei Bedarf selbst.                     │
 │ Tipp: Lade vorher einen [Export] herunter.        │
 │                                                   │
 │ Tippe ALLES LÖSCHEN, um zu bestätigen             │
@@ -641,8 +668,9 @@ Nach einem Fehler wird das Passwortfeld geleert, die E-Mail bleibt stehen.
 ```
 - [Endgültig löschen] (`destructive`) ist gesperrt, bis die Eingabe **genau** „ALLES LÖSCHEN“ lautet. Groß- und Kleinschreibung zählen, Leerzeichen am Rand werden entfernt. Darunter steht live: „Noch nicht bestätigt“ bzw. nichts, sobald es passt.
 - Der Fokus startet auf [Abbrechen]. `Enter` im Feld löst nur aus, wenn der Text passt.
-- Danach: Toast „Alle Daten wurden gelöscht.“, Wechsel zu „Heute“ (Erster-Start-Zustand).
-- Fehler: „Löschen hat nicht geklappt. Es wurde nichts gelöscht.“ (nur, wenn das Backend das zusichert, siehe 9).
+- Danach: Toast „Alle Daten wurden gelöscht.“, Wechsel zu „Heute“. Dort erscheint der Erster-Start-Zustand (Willkommenskarte, kein Ziel). Beispieldaten lädt Simfit danach **nicht von selbst**, nur auf [Beispieldaten laden] (M2).
+- Fehler (Datenbank-Teil gescheitert): „Löschen hat nicht geklappt. Es wurde nichts gelöscht.“ – das sichert das Backend zu (eine Transaktion, M2).
+- Fehler `delete_incomplete` (Datenbank gelöscht, aber Anmeldung oder Sicherungen nicht): Meldung des Servers wörtlich in einem Band `destructive` im Dialog, z. B. „Nicht alles wurde gelöscht: gespeicherte Garmin-Anmeldung, Sicherungen. Bitte Simfit neu starten und erneut löschen.“ Der Dialog bleibt offen, [Endgültig löschen] wieder bedienbar.
 
 | Zustand | Inhalt |
 |---|---|
@@ -662,21 +690,22 @@ Nach einem Fehler wird das Passwortfeld geleert, die E-Mail bleibt stehen.
 | Anf. | Ablauf | Rückmeldung |
 |---|---|---|
 | A6/A7 erster Start | App öffnen → „Heute“ zeigt Willkommen + Demo-Band → [Beispieldaten laden] → Sync läuft → Kennzahlen erscheinen | Knopf lädt, Toast „Daten aktualisiert“, Demo-Band bleibt |
-| A1/A6 Garmin verbinden | Demo-Band „Mit Garmin verbinden →“ → Einstellungen#garmin → E-Mail + Passwort → [Verbinden] → (Code) → Verbunden → Sync 30 Tage startet | Ladeknopf, Schritt 2 mit Fokus, Erfolgsband, Sync-Status „Läuft“, dann Toast |
+| A1/A6 Garmin verbinden | Demo-Band „Mit Garmin verbinden →“ → Einstellungen#garmin → E-Mail + Passwort → [Verbinden] → (Code) → Verbunden → Oberfläche startet den ersten Abruf über 30 Tage (M4) | Ladeknopf, Schritt 2 mit Fokus, Erfolgsband, Sync-Status „Läuft“, dann Toast |
 | A1/A9 Aktualisieren | [Aktualisieren] (Seitenleiste bzw. Kopf „Heute“) → Lauf → Werte neu | „Wird aktualisiert …“, Toast; bei 429 Band mit Uhrzeit, Knopf gesperrt mit Uhrzeit |
 | A9 Anmeldung abgelaufen | Band auf „Heute“ → [Neu verbinden] → Einstellungen Schritt 1 | Band verschwindet nach Erfolg |
 | A2 Tag ansehen | „Heute“ öffnen → Kennzahlen lesen → Verlauf-Chip wählen → Tooltip | Chip aktiv (`aria-pressed`), Diagramm wechselt (150 ms) |
 | A2 Aktivität ansehen | Aktivitäten → (Filter) → Zeile → Detail → „← Aktivitäten“ | Detail lädt mit Skeleton; zurück an dieselbe Scrollstelle |
-| A3 Mahlzeit eintragen | Ernährung (heute) → „+ “ bei Frühstück → suchen → Treffer → Menge → [Zu Frühstück hinzufügen] | Ergebnisse live, Nährwerte live gerechnet, Toast, Zeile hervorgehoben, Übersicht aktualisiert |
-| A3 per Barcode | wie oben, Ziffern eintippen → Produkt → Menge | „Produkt gefunden“ bzw. Barcode-unbekannt-Text |
+| A3 Mahlzeit eintragen | Ernährung (heute) → „+ “ bei Frühstück → suchen (eigene Treffer) → falls nötig [Auch bei Open Food Facts suchen] bzw. Enter → Treffer → Menge (g) → [Zu Frühstück hinzufügen] | eigene Treffer live, OFF erst nach Knopf/Enter mit Skeleton, Nährwerte live gerechnet, Toast, Zeile hervorgehoben, Übersicht aktualisiert |
+| A3 per Barcode | wie oben, Ziffern eintippen → „Barcode erkannt – mit Enter suchen“ → Enter → Produkt → Menge | „Produkt gefunden“ bzw. Barcode-unbekannt-Text |
 | A3 eigenes Lebensmittel | Suche ohne Treffer → [Eigenes Lebensmittel anlegen] → Werte → [Anlegen] → Menge | Feldfehler sofort beim Verlassen, Toast „Lebensmittel angelegt“ |
-| A3 Ziel setzen | Ernährung → [Ziel ändern] → Werte → [Speichern] | Toast, Messleisten aktualisiert |
+| A3 Ziel setzen | Ernährung → [Ziel festlegen] (ohne Ziel, aus Band oder Willkommenskarte) bzw. [Ziel ändern] → Werte → [Speichern] | Toast, Messleiste „Ziel“ erscheint bzw. aktualisiert, Band „Lege ein Tagesziel fest“ verschwindet |
 | A3 Eintrag löschen | Zeile → `Trash2` → (Rückgängig) | Zeile weg, Toast mit Rückgängig |
 | A4 Plan anlegen | Training (leer) → [Plan anlegen] → Name, Start, Wochen → [Anlegen] → Woche 1 | Toast, Hinweis „Füge deine erste Einheit hinzu“ |
 | A4 Einheit planen | Tag → [+] → Sportart, Titel, Dauer → [Speichern] | Dialog schließt, Karte erscheint am Tag, Toast |
 | A4 geplant gegen absolviert | Training → laufende Woche (automatisch) → Status je Einheit + Wochenleiste → Aktivität-Link | Status mit Symbol + Text, Link zur Detailseite |
 | A10 Export | Einstellungen → [Export herunterladen] | Ladeknopf, Download, Toast |
-| A10 Alles löschen | Einstellungen → [Alles löschen…] → Text tippen → [Endgültig löschen] | Knopf erst bei exaktem Text aktiv, Toast, „Heute“ im Erststart |
+| A10 Alles löschen | Einstellungen → [Alles löschen…] → Text tippen → [Endgültig löschen] | Knopf erst bei exaktem Text aktiv, Toast, „Heute“ im Erststart; bei `delete_incomplete` Band mit dem, was noch da ist |
+| A1 Zeitraum holen | Einstellungen#sync → Zeitraum 7/30/90 Tage → [Jetzt holen] | Sync-Status „Läuft“, dann Toast; bei 429 Uhrzeit aus `retry_after` |
 
 ---
 
@@ -695,14 +724,16 @@ Nach einem Fehler wird das Passwortfeld geleert, die E-Mail bleibt stehen.
 
 ---
 
-## 9. Merkposten für Projektleiter und Architekt (betreffen nicht nur die Oberfläche)
+## 9. Merkposten für Projektleiter und Architekt – entschieden (Planprüfung 2026-11-04)
 
-- **M1 – Demo überschreibt echte Daten? (möglicher Datenverlust):** AE-6 (b) sagt „stammt die vorhandene Zeile aus einer anderen `source`, wird sie komplett ersetzt“. Mit `SIMFIT_SOURCE=auto` ist nach „Verbindung trennen“ (oder nach abgelaufenen Tokens, falls `auto` dann auf Demo fällt) die Demo-Quelle aktiv. Der automatische Sync alle 6 h würde echte Garmin-Tage mit erfundenen Werten ersetzen. Bitte festlegen: Demo schreibt **nie** über `source="garmin"`, oder nach einer ersten Garmin-Verbindung bleibt die Quelle Garmin (dann Status `auth_required`, kein Demo). Bis das geklärt ist, ist der Satz „Bereits geholte Werte bleiben erhalten“ im Trennen-Dialog nicht gesichert.
-- **M2 – Was löscht `delete-all`?** Der Dialog nennt Tageswerte, Aktivitäten, Mahlzeiten, eigene Lebensmittel, Ziele und Pläne. Offen ist, ob auch die Garmin-Anmeldung (Tokens) und die Sicherungen in `backups/` gelöscht werden. Für A10 („Löschen möglich“) sollten Sicherungen mit gelöscht oder im Text genannt werden. Der Text wird angepasst, sobald das feststeht. Ebenso: Läuft das Löschen in einer Transaktion (für den Fehlertext „Es wurde nichts gelöscht“)?
-- **M3 – Uhrzeit bei 429 und Anmeldesperre:** Für die Uhrzeit-Meldung braucht die Oberfläche `next_attempt_after` (ISO, UTC) auch in der **429-Antwort** von `POST /sync` und `POST /garmin/connection`. Laut §6 steht es nur im `SyncRun`. Vorschlag: Fehlerantwort um `retry_after` (ISO) ergänzen, sonst kann die Oberfläche nur „später erneut versuchen“ schreiben.
-- **M4 – Sync nach dem Verbinden:** Der Ablauf startet nach `connected` einen Sync über 30 Tage (Oberfläche ruft `POST /sync`). Falls das Backend selbst nach der Verbindung synchronisieren soll, bitte festlegen, damit nicht doppelt geholt wird.
-- **M5 – Mengen nur in Gramm:** Die API kennt nur `amount_g`. Getränke (ml) und Portionen („1 Scheibe“) gibt es nicht. Für den Freund ist das eine Hürde, sie bleibt aber im Rahmen: Das Feld heißt „Menge (g)“, Schnellwahl 50/100/150/200 g. Portionen wären eine spätere Erweiterung (nicht stillschweigend weglassen, Hinweis an Simon).
-- **M6 – „Training heute“ auf dem Dashboard** braucht den aktiven Plan und die Einheiten von heute. Das geht über `GET /training/plans` und `comparison`, also zwei Aufrufe. Akzeptabel, oder ein kleiner Endpunkt `GET /training/today`? Entscheidung beim Architekten.
+Alle sechs Punkte sind entschieden und in ARCHITEKTUR §6 bzw. AE-15/AE-16/AE-20 und den Bauplänen P6, P8, P10, P11, P13 festgehalten. Die Texte in Abschnitt 6 sind danach ausgerichtet.
+
+- **M1 – Demo überschreibt nie Garmin-Daten. Entschieden.** Beispieldaten schreiben nie über Zeilen mit `source="garmin"`; nach der ersten Garmin-Verbindung lädt Simfit keine Beispieldaten mehr (AE-6, AE-15). Damit ist der Satz „Bereits geholte Werte bleiben erhalten“ im Trennen-Dialog gesichert.
+- **M2 – „Alles löschen“. Entschieden.** Entfernt alle Inhalte der Datenbank (Tageswerte, Aktivitäten, Rohdaten, Mahlzeiten, eigene und importierte Lebensmittel, Ziel, Pläne, Abruf-Verlauf), die gespeicherte Garmin-Anmeldung (Tokens), alle Sicherungen in `backups/` und setzt die Merker zur Garmin-Verbindung zurück (z. B. „war schon verbunden“). Die USDA-Basis-Lebensmittel bleiben bzw. werden wieder angelegt (keine persönlichen Daten). Der Datenbank-Teil läuft **ganz oder gar nicht** (eine Transaktion): Scheitert er, ist nichts gelöscht → Text „Löschen hat nicht geklappt. Es wurde nichts gelöscht.“ Scheitert danach das Entfernen von Anmeldung oder Sicherungen, meldet der Server `delete_incomplete` mit dem, was noch da ist; die Oberfläche zeigt diesen Text wörtlich (6.6). Ehrlicher Löschtext: **Heruntergeladene Exporte im Download-Ordner und die Daten bei Garmin bleiben** – das steht im Dialog. Hinweis aus P13: Die Garmin-Bremse (Wartezeit nach 429, Zähler der Anmeldeversuche) bleibt absichtlich bestehen, damit ein Löschen das Konto nicht der Sperre aussetzt; das muss der Nutzer nicht sehen.
+- **M3 – `retry_after` auch in Fehlerantworten. Entschieden.** Die 429-Antwort (`garmin_rate_limited`, Anmeldesperre) trägt `retry_after` (ISO, UTC). Die Oberfläche zeigt daraus „Wieder möglich ab 14:35 Uhr“ (5.2, 6.6); fehlt der Wert, „Bitte später erneut versuchen.“
+- **M4 – Erster Abruf nach dem Verbinden. Entschieden: genau einer.** Laut ARCHITEKTUR AE-16 und Bauplan P6/P8 startet ihn die **Oberfläche** (`POST /sync {range_days: 30}` nach `connected`); das Backend startet beim Verbinden selbst keinen. So wird nicht doppelt geholt. Für Nutzer sieht es gleich aus: „Simfit holt jetzt deine Daten der letzten 30 Tage.“
+- **M5 – Mengen nur in Gramm. Entschieden.** Feld „Menge (g)“, 0,5–5.000 g, Komma erlaubt, Schnellwahl 50/100/150/200 g. Getränke ebenfalls in g. Portionen und ml sind zurückgestellt (ARCHITEKTUR §10) – Hinweis an Simon bleibt bestehen.
+- **M6 – „Training heute“. Entschieden.** Eigener Endpunkt `GET /training/today` → `{plan, sessions}` (laufender Plan, bei mehreren der zuletzt angelegte). Die Karte zeigt nur den heutigen Tag, keine Vorschau „Als Nächstes …“.
 
 ---
 
@@ -719,12 +750,12 @@ Nach einem Fehler wird das Passwortfeld geleert, die E-Mail bleibt stehen.
 
 | Paket | Bildschirm | Pflicht-Zustände |
 |---|---|---|
-| P8 | Heute | Erster Start, lädt, gefüllt, heute kein Wert, Kennzahl ganz ohne Daten (ausgeblendet), zu wenig Vergleich, Sync läuft, Rate-Limit-Band mit Uhrzeit, Anmeldung nötig, Fehler je Karte, kein Plan / nichts geplant, kein Ziel |
+| P8 | Heute | Erster Start, lädt, gefüllt, heute kein Wert, Kennzahl ganz ohne Daten (ausgeblendet), zu wenig Vergleich, Sync läuft, Rate-Limit-Band mit Uhrzeit, Anmeldung nötig, Fehler je Karte, kein Plan / heute nichts geplant (ohne „Als Nächstes“) / Einheit heute, kein Ziel (`goal null`, Schritt ③ nicht erledigt), Verbrauch „bisher“, kein Garmin-Verbrauch |
 | P8 | Aktivitäten | leer, leer mit Filter, lädt, gefüllt, „Ältere laden“ + Ende, langer Name, Fehler (auch beim Nachladen) |
 | P8 | Detail | lädt, gefüllt (Felder ohne Wert weggelassen), `id` fehlt, 404, Fehler |
-| P8 | Einstellungen | Demo, Verbinden Schritt 1 und 2 (MFA), lädt, verbunden, alle Verbindungsfehler (Tabelle 6.6), Anmeldesperre mit Uhrzeit, trennen, Sync-Zeitraum, Export lädt/fertig/Fehler, Alles-löschen-Dialog (Knopf gesperrt bis exakter Text) |
+| P8 | Einstellungen | Demo, Verbinden Schritt 1 und 2 (MFA), lädt, verbunden, alle Verbindungsfehler (Tabelle 6.6), Anmeldesperre mit Uhrzeit, trennen, Sync-Zeitraum genau 7/30/90 Tage, Export lädt/fertig/Fehler, Alles-löschen-Dialog (Knopf gesperrt bis exakter Text, Text nennt Anmeldung/Sicherungen und was bleibt, Fehler „nichts gelöscht“ und `delete_incomplete`), Über Simfit mit USDA-Text ohne Link |
 | P8 | global | Demo-Band (ausblendbar je Sitzung), Sync-Status alle 7 Fälle (Tabelle 5.2), Navigation 3 Breiten, 404-Seite |
-| P10 | Ernährung | kein Ziel, leerer Tag, lädt, gefüllt, über Ziel, kein Garmin-Verbrauch, Zukunft, Sheet: < 2 Zeichen, lokal + OFF, OFF lädt, OFF-Fehler, OFF-Grenze, nichts gefunden, Barcode gefunden/unbekannt, Menge ungültig, Speichern-Fehler; Löschen mit Rückgängig; Ziel-Dialog; eigenes Lebensmittel; **OFF-Hinweis sichtbar** in Sheet und Fußzeile |
+| P10 | Ernährung | kein Ziel (ohne Messleiste), leerer Tag mit/ohne Ziel, lädt, gefüllt, über Ziel, kein Garmin-Verbrauch, laufender Tag „bisher“, Zukunft, Sheet: < 2 Zeichen, nur eigene Treffer + OFF-Knopf, OFF lädt (nach Knopf/Enter), OFF-Fehler, OFF-Grenze, nichts gefunden (lokal / nach OFF), Barcode erkannt (kein Auto-Aufruf) / gefunden / unbekannt, Menge ungültig (0,5–5.000 g), Speichern-Fehler; Löschen mit Rückgängig; Ziel-Dialog; eigenes Lebensmittel; **OFF-Hinweis** im Sheet nur bei OFF-Treffern, Fußzeile immer mit OFF- und USDA-Text (USDA ohne Link) |
 | P12 | Training | kein Plan, Plan ohne Einheiten, lädt, gefüllt, alle 4 Status + „Zusätzlich“, heutiger Tag markiert, Grenzen des Plans, Plan noch nicht gestartet / beendet, viele Einheiten an einem Tag, viele Pläne, Dialoge Plan/Einheit mit Fehlern, Löschen mit Rückfrage |
 
 ### 10.3 Tests, die ich vorschlage (Architekt nimmt sie in die Baupläne auf)
@@ -735,7 +766,8 @@ Nach einem Fehler wird das Passwortfeld geleert, die E-Mail bleibt stehen.
 5. **Alles löschen (P8/P13):** Knopf gesperrt bei „alles löschen“, „ALLES LÖSCHE“ und leer; aktiv bei „ALLES LÖSCHEN“ und „ ALLES LÖSCHEN “; Enter vorher löst nichts aus. Gesendet wird `{confirm: "ALLES LÖSCHEN"}`.
 6. **MFA-Ablauf (P8):** `mfa_required` → Codefeld hat Fokus und `autocomplete="one-time-code"`; das Passwort steht nach dem Absenden nicht mehr im DOM bzw. Zustand.
 7. **Rate-Limit-Uhrzeit (P8):** `next_attempt_after` 13:35Z mit Zeitzone Europe/Berlin → „14:35 Uhr“; am Folgetag → „morgen, …“ (Zeit als Parameter, nicht `Date.now()` im Formatierer).
-8. **OFF-Hinweis (P10):** Sobald die Suchantwort OFF-Treffer enthält oder ein Tagebucheintrag `food_origin="off"` hat, ist der Hinweis mit Link sichtbar.
+8. **OFF-Hinweis (P10):** Sobald die Suchantwort OFF-Treffer enthält oder ein Tagebucheintrag `food_origin="off"` hat, ist der Hinweis mit Link sichtbar; ohne OFF-Treffer steht im Sheet keiner. Fußzeile immer mit OFF- und USDA-Text, USDA ohne Link.
+11. **OFF nur auf Knopf/Enter (P10):** Tippen und Warten ruft die Suche nur mit `online=false`; erst Knopf oder `Enter` ruft `online=true`; Barcode erst nach `Enter` (deckt sich mit `test_s12_off_nur_auf_knopf_oder_enter`).
 9. **Tastatur (alle):** Dialog fängt den Fokus, Esc schließt, der Fokus kehrt zum Auslöser zurück (mit `fireEvent`, siehe Lektion zu userEvent/Fake-Timers).
 10. **Sichtprüfung (Entwickler vor FERTIG, Prüfliste Oberflächen-Standard):** Playwright-Screenshots 1440 und 390, hell **und** dunkel, je Pflicht-Zustand. Überlagerungen (Demo-Band, Toasts über der Tab-Leiste, Sheet/Drawer, Dialoge) in jeder Ansicht am Handy und Desktop fotografieren (Lektion „Überlagerungen“). Kein waagrechtes Scrollen bei 390 px (Test: `document.documentElement.scrollWidth <= 390`).
 
