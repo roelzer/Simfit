@@ -15,3 +15,5 @@ Wird automatisch geschrieben. Jede Zeile: Zeit, Agent, was er bekommen bzw. geme
 | 2026-11-04 13:05 | ■ 🟡 | rechercheur | 🟡 Recherche geschrieben: /home/user/Simfit/fachwissen/recherche/simfit-grundlagen.md. Noch keine Gegenprüfung; die muss ein eigener Aufruf machen. Gelb, wei ([Bericht](docs/pruefberichte/20261104-130524-rechercheur-ad5d0207f0fadef30.md)) |
 | 2026-11-04 13:05 | ▶ | rechercheur | Gegenprüfung Recherche |
 | 2026-11-04 13:07 | ■ 🔴 | sicherheitspruefer | 🔴 **Sicherheitsprüfer, Modus plan: Den Plan bitte noch nicht so freigeben. Zwei Lücken müssen vorher ins Rückgrat (P1). Beide sind am Prototyp getestet,  ([Bericht](docs/pruefberichte/20261104-130736-sicherheitspruefer-a0e4bd15f95a9a0fb.md)) |
+| 2026-11-04 13:09 | ■ 🟡 | rechercheur | Ampel: 🟡. Die Recherche ist im Kern tragfähig. Zwei Punkte gelten noch nicht als Fachregel: die BLS-Lizenz "CC BY 4.0" und das 429-Backoff mit Zahlen. Ein P ([Bericht](docs/pruefberichte/20261104-130905-rechercheur-a4fcff83158fdfd77.md)) |
+| 2026-11-04 13:09 | ▶ | architekt | Architekt: Rückgrat überarbeiten |
