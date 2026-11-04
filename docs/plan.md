@@ -52,15 +52,15 @@ Mapping: A1 → P1,P4,P5,P7 · A2 → P2,P8 · A3 → P3,P9,P10 · A4 → P11,P1
 **Auslöser-Checkliste**
 | Risiko-Auslöser | ja/nein | Begründung |
 |---|---|---|
-| Anmeldung/Rechte | offen | lokal nein; gehostet ja (Schutz der Instanz), hängt an Q1 |
+| Anmeldung/Rechte | ja | App nimmt Garmin-Passwort und MFA-Code über die eigene Oberfläche an, begrenzt Anmeldeversuche (Kritiker-Befund) |
 | personenbezogene/vertrauliche Daten | ja | Gesundheitsdaten (Art. 9) |
 | Datenbank/Migration | ja | Schema wächst (Trainingsplan), Änderungen an bestehender SQLite |
-| Serverbetrieb | offen | hängt an Q1 |
+| Serverbetrieb | ja | Dauerprozess mit Hintergrund-Sync, täglicher Sicherung, Docker, Migration beim Start (Kritiker-Befund) |
 | Netzwerk/Schnittstellen | ja | Garmin Connect, Open Food Facts |
 | Updates/Signierung/Release | ja | Übergabe an Freund, Updatepfad |
 | Geheimnisse/Schlüssel | ja | Garmin-Tokens und -Zugang |
 | Löschen/Überschreiben | ja | Sync überschreibt Tageswerte, Löschen von Einträgen/Plänen |
-| Desktop-Berechtigungen | nein | Web-App |
+| Desktop-Berechtigungen | nein | Web-App; Startskripte schreiben `.env` und öffnen den Browser (knapp, vom Sicherheitsprüfer mitgeprüft) |
 | neue fremde Abhängigkeiten | ja | Tailwind/shadcn, Verschlüsselungsbibliothek, ggf. Docker |
 | mehrere Nutzer, dieselben Daten | nein | ein Nutzer |
 | Dateien/Daten von außen (Upload/Import) | ja | Antworten von Garmin und Open Food Facts sind Fremddaten |

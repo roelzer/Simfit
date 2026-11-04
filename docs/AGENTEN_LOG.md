@@ -9,3 +9,6 @@ Wird automatisch geschrieben. Jede Zeile: Zeit, Agent, was er bekommen bzw. geme
 | 2026-11-04 12:38 | ▶ | designer | Design-Entwurf Simfit |
 | 2026-11-04 12:49 | ■ 🟡 | designer | **Ampel: GELB.** Der Entwurf ist fertig und vollständig. Gelb, weil drei Punkte außerhalb der Oberfläche geklärt werden müssen (M1 bis M3 unten). Einer dav ([Bericht](docs/pruefberichte/20261104-124904-designer-abeb3c342ea8dedaf.md)) |
 | 2026-11-04 12:49 | ▶ | kritiker | Kritiker prüft Plan |
+| 2026-11-04 12:58 | ■ 🟡 | kritiker | 🟡 **Kritiker, Modus plan (mit Bauplan-Probe): Der Plan deckt alle Kernanforderungen ab und taugt als Gerüst. Vor dem Bau von M2 müssen aber drei Stellen ge ([Bericht](docs/pruefberichte/20261104-125800-kritiker-a1eef1076d3156e40.md)) |
+| 2026-11-04 12:58 | ▶ | rechercheur | Recherche Garmin, OFF, Lebensmittel |
+| 2026-11-04 12:58 | ▶ | sicherheitspruefer | Sicherheitsprüfung des Plans |
