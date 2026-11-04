@@ -2,15 +2,15 @@
 
 **Auftrag:** Simfit weiterbauen · **Zuletzt aktualisiert:** 2026-11-04
 
-> **Jetzt:** Planung, Architekt-Entwurf · **Zuletzt fertig:** Lastenheft und Plan-Entwurf · **Als Nächstes:** Designer, Kritiker, Startfreigabe · **Geschätzt fertig:** offen · **Fortschritt:** 0 von ? Paketen
+> **Jetzt:** Planung – Architekt schreibt die vollständigen Baupläne (Schritt 2) · **Zuletzt fertig:** Rückgrat überarbeitet (38 Architekturtests grün), Recherche + Gegenprüfung, Kritiker, Sicherheitsprüfer · **Als Nächstes:** Startfreigabe an Simon · **Geschätzt fertig:** offen · **Fortschritt:** 0 von 16 Paketen (noch nicht gebaut)
 
 ## Gerade läuft
-Phase 2: Plan und Architektur – Architekt ⏳
+Phase 3/4: Planprüfung abgeschlossen (Kritiker 🟡, Sicherheitsprüfer 🔴 → eingearbeitet, Recherche 🟡) · Architekt Baupläne ⏳
 
-**Arbeitsbranch:** claude/lucid-gates-69jllu (von der Sitzung vorgegeben, statt `dev-team/<auftrag>`) · **Letzter grüner Stand:** keiner (Test-Schranke nicht eingerichtet)
+**Arbeitsbranch:** claude/lucid-gates-69jllu · **Letzter grüner Stand:** nur Architekturtests (38 passed); Test-Schranke nicht eingerichtet (wartet auf Freigabe Q3)
 
 ## Ampel
-🟡 läuft, offene Fragen (Q1–Q3)
+🟡 Fragen an Simon offen (Q1–Q3, E-1…E-6, F-Bilanz, F-Umfang, F-Zeitraum, F-Kontakt)
 
 ## Offene Fragen
-Siehe `docs/OFFENE_FRAGEN.md` (3 offen, keine blockiert).
+Siehe `docs/OFFENE_FRAGEN.md`.

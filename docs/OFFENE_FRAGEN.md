@@ -15,9 +15,14 @@ Alle mit Empfehlung; ohne Antwort gilt die Empfehlung (keine blockiert den Plana
 - **F-Bilanz (fachlich):** Was zeigt die Kalorienbilanz an Tagen ohne Garmin-Verbrauchswert? – Empfehlung: keine Bilanz, nur „kein Verbrauch von Garmin vorhanden“ (Design). Bisher im Prototyp: Ziel als Verbrauch gerechnet.
 - **F-Umfang (fachlich):** Darf folgendes für diesen Auftrag wegfallen (steht in `docs/ANFORDERUNGEN.md`, aber nicht in A1–A11)? Mengen nur in Gramm (keine ml/Portionen), Gewichtsverlauf, „zuletzt verwendet“, Kalorienziel-Modus (abnehmen/halten/zunehmen), regelbasierte Trainingspläne, Training Load/Readiness, Karte und Pulszonen in Aktivitäten. Empfehlung: ja, später als eigener Auftrag; sonst fehlen sie still.
 
+- **F-Zeitraum:** Einstellung „Daten holen: 1 Jahr“ streichen, höchstens 90 Tage je Abruf? – Empfehlung: ja (1 Jahr = rund 1.500 Garmin-Aufrufe, Sperr-Risiko unbekannt). Ohne Antwort: 90 Tage.
+- **F-Kontakt:** Welche E-Mail-Adresse von dir geht im User-Agent an Open Food Facts (Pflicht dort)? Ohne Adresse bleibt die Online-Suche aus.
+
 ## Fachliche Bestätigungen für Simon
 (keine)
 
 ## Nur Simon
 - [ ] Garmin-Zugangsdaten am Ende selbst eingeben, über die Einrichtungsseite der App (Anleitung kommt mit der Übergabe, Paket P15).
+- [ ] BLS-Lizenz lesen (blsdb.de oder mri.bund.de, Nutzungsbedingungen); bis dahin Basis-Lebensmittel aus USDA (CC0).
+- [ ] Optional: in den Netzwerk-Einstellungen der Cloud-Umgebung freigeben (eur-lex.europa.eu, mri.bund.de, blsdb.de, fdc.nal.usda.gov, openfoodfacts.github.io, forums.garmin.com), damit Recherche und OFF-Prüfung gegen Primärquellen laufen.
 - [ ] Probelauf auf einem frischen Rechner (Startskript bis „Heute zeigt Beispieldaten“) – A6 braucht einen Menschen.

@@ -18,31 +18,33 @@ Details: `docs/ARCHITEKTUR.md`. Der Prototyp bleibt und wird umgebaut.
 - Fertiger Zustand: ein Prozess liefert API und statisch exportierte Oberfläche unter `127.0.0.1:8000`.
 - **ANNAHME:** Garmin-Beispieldaten sind nachgebaut (nicht aufgezeichnet); ob sie zur echten Struktur passen, zeigt erst der erste echte Sync. **ANNAHME:** OFF-Grenzen (10 Suchen/min, 100 Abrufe/min) stammen aus einer Websuche, Doku nicht erreichbar.
 
-## 5. Arbeitspakete
+## 5. Arbeitspakete (Stand nach Planprüfung, 16 Pakete, „Schnittstelle zuerst“)
+Baupläne: `docs/bauplaene/<Paket>.md`. Kritischer Pfad: P1a → P5 → P7 → P14 → P15 (5 von 16).
 | Nr | Was | Abhängig von | Parallel mit |
 |---|---|---|---|
 | **M1** | | | |
-| P1 | Backend-Fundament (Modell, Migration, Fehlerformat, API v1) | V0 | P2, P3 |
-| P2 | Oberflächen-Grundlage (Tailwind, shadcn/ui, Tokens) | V0, Designer | P1, P3 |
-| P3 | Open-Food-Facts-Adapter | V0 | P1, P2 |
+| P1a | Backend-Grundlage und Schnittstelle (Modell, Migration, Fehlerkatalog, Host-/Origin-Schutz, Sperre) | V0, Tester-Vorarbeit | P1b, P2, P3 |
+| P1b | Frontend-Schnittstelle (`lib/api/*`, Typen) | V0 | P1a, P2, P3 |
+| P2 | Oberflächen-Grundlage (Tailwind, shadcn/ui, Tokens, AppShell); Merge erst nach P1b | V0, Designer | P1a, P1b, P3 |
+| P3 | Open-Food-Facts-Adapter | V0, PL-Vorarbeit (OFF v3 prüfen) | P1a, P1b, P2 |
 | **M2** | | | |
-| P4 | Garmin-Normalisierung und Beispieldaten | P1 | P5, P6, P8 |
-| P5 | Sync-Dienst (Backoff, Doppelungen, Abbruch) | P1 | P4, P6, P8 |
-| P6 | Verbindung, Token-Tresor, Einrichtung im Browser | P1 | P4, P5, P8 |
-| P7 | Garmin-Cloud-Quelle und Verdrahtung | P4, P5, P6 | P8 |
-| P8 | Oberfläche Dashboard, Aktivitäten, Einstellungen | P1, P2 | P4–P7 |
+| P4 | Garmin-Daten: normalisieren, Demo, lesen | P1a | P5, P6, P8, P11 |
+| P5 | Garmin-Abruf: speichern, Sync, Backoff, Sperre | P1a | P4, P6, P8, P11 |
+| P6 | Verbindung, Token-Tresor, Einrichtung | P1a | P4, P5, P8, P11 |
+| P8 | Oberfläche Heute, Aktivitäten, Einstellungen inkl. „Deine Daten“ | P1b, P2 | P4, P5, P6, P11 |
+| P11 | Trainingsplan Backend inkl. `/training/today` | P1a | P4, P5, P6, P8 |
 | **M3** | | | |
-| P9 | Lebensmittelsuche Backend | P1, P3 | P10–P12 |
-| P10 | Ernährung-Oberfläche | P2, P8 | P9, P11, P12 |
-| P11 | Trainingsplan Backend | P1 | P9, P10, P12 |
-| P12 | Trainingsplan-Oberfläche | P2, P8 | P9–P11 |
+| P7 | Garmin-Cloud-Quelle und Verdrahtung | P4, P5, P6 | P9, P10, P12, P13 |
+| P9 | Ernährung Backend (Basis-Lebensmittel aus USDA) | P1a, P3, PL-Vorarbeit (USDA-Liste) | P7, P10, P12, P13 |
+| P10 | Ernährung-Oberfläche | P1b, P2 | P7, P9, P12, P13 |
+| P12 | Trainingsplan-Oberfläche | P1b, P2 | P7, P9, P10, P13 |
+| P13 | Datenschutz Backend (Export, Alles löschen) | P1a, P6 | P7, P9, P10, P12 |
 | **M4** | | | |
-| P13 | Datenschutz: Export und Löschen | M3 | P14 |
-| P14 | Betrieb und Auslieferung (Docker, Sicherung, Header) | M3 | P13 |
-| P15 | Übergabe-Anleitung | P14 | – |
+| P14 | Betrieb und Auslieferung (Docker, Sicherung, Header/CSP, Wiederherstellung) | M3 | – |
+| P15 | Übergabe-Anleitung, A6-Protokollvorlage | P14 | – |
 
-Vorarbeit V0 (Tester, vor M1): `pytest.ini`, `conftest.py` mit Netzsperre, `tests/run_all.py`, Vitest-Konfiguration. Baupläne je Paket: Bericht des Architekten (`docs/pruefberichte/`), vollständige Fassung nach der Kritiker-Runde.
-Mapping: A1 → P1,P4,P5,P7 · A2 → P2,P8 · A3 → P3,P9,P10 · A4 → P11,P12 · A5 → P1,P5,P7 · A6 → P14,P15 · A7 → P1,P6,P14 · A9 → P5,P6,P7 · A10 → P3,P9,P13,P14.
+Mapping: A1 → P1a,P4,P5,P6,P7 · A2 → P2,P4,P8 · A3 → P3,P9,P10 · A4 → P11,P12,P8 · A5 → P1a,P5,P7 · A6 → P6,P14,P15 + protokollierter Probelauf (Nur Simon) · A7 → P1a,P4,P6,P14 · A9 → P5,P6,P7 · A10 → P1a,P3,P9,P13,P14,P15.
+Vorarbeit: Tester V0, Tester-Vorarbeit P1a/P2, Garmin-Ersatz mit Ausnahmeketten (siehe `docs/bauplaene/VORARBEIT.md`). Annahme: P1a ist größer als 30 Minuten (1,5–2 h), weil das ganze Schema in einer Migration entstehen muss; M1 läuft dabei parallel.
 
 ## 6. Absicherung
 - Testgetrieben, verdeckte Abnahmetests (Tester), Architekturtests (Architekt).
