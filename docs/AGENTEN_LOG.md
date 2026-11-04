@@ -18,3 +18,4 @@ Wird automatisch geschrieben. Jede Zeile: Zeit, Agent, was er bekommen bzw. geme
 | 2026-11-04 13:09 | ■ 🟡 | rechercheur | Ampel: 🟡. Die Recherche ist im Kern tragfähig. Zwei Punkte gelten noch nicht als Fachregel: die BLS-Lizenz "CC BY 4.0" und das 429-Backoff mit Zahlen. Ein P ([Bericht](docs/pruefberichte/20261104-130905-rechercheur-a4fcff83158fdfd77.md)) |
 | 2026-11-04 13:09 | ▶ | architekt | Architekt: Rückgrat überarbeiten |
 | 2026-11-04 13:25 | ■ 🟡 | architekt | 🟡 **Architekt, Modus entwurf (Überarbeitung), Schritt 1 von 2: Das Rückgrat ist fertig.** Jeder Befund aus der Planprüfung hat jetzt eine Regel, wo mögli ([Bericht](docs/pruefberichte/20261104-132552-architekt-af4ade4fe2573e0f1.md)) |
+| 2026-11-04 13:26 | ▶ | architekt | Architekt: vollständige Baupläne |
