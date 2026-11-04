@@ -31,7 +31,7 @@ export default function TrendChart({
       <div className="chart-box" role="img" aria-label={`Verlauf ${title}`}>
         {hasData ? (
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data} margin={{ top: 12, right: 8, bottom: 0, left: -12 }}>
+            <LineChart data={data} margin={{ top: 12, right: 8, bottom: 0, left: 0 }}>
               <CartesianGrid stroke="var(--grid)" strokeDasharray="3 3" />
               <XAxis
                 dataKey="date"
