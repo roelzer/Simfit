@@ -1,16 +1,16 @@
 # Status
 
-**Auftrag:** Simfit weiterbauen · **Zuletzt aktualisiert:** 2026-11-04
+**Auftrag:** Simfit weiterbauen · **Zuletzt aktualisiert:** 2026-11-11
 
-> **Jetzt:** wartet auf Startfreigabe von Simon (Plan vollständig, 16 Baupläne) · **Zuletzt fertig:** Rückgrat überarbeitet (38 Architekturtests grün), Recherche + Gegenprüfung, Kritiker, Sicherheitsprüfer · **Als Nächstes:** nach Freigabe: Testbefehl einrichten, V0, verdeckte Abnahmetests, M1 · **Geschätzt fertig:** offen · **Fortschritt:** 0 von 16 Paketen (noch nicht gebaut)
+> **Jetzt:** Planung steht (16 Baupläne), aber Betriebsmodell muss neu geklärt werden (Simon: „alles lokal“, Google-/Apple-Login, Freund nutzt iPhone) · **Als Nächstes:** Simons Antwort auf die Klärungsfragen, dann Neuplanung (Anmeldung, Betrieb, Backups, deutsche Bezeichner), dann Startfreigabe · **Fortschritt:** 0 von 16 Paketen (noch nicht gebaut)
 
 ## Gerade läuft
-Phase 5: Startfreigabe – Planprüfung abgeschlossen (Kritiker 🟡, Sicherheitsprüfer 🔴 → eingearbeitet, Recherche 🟡), Baupläne P1a–P15 fertig ✅
+Phase 5: Warten auf Simon. Keine Freigabe zum Bauen erteilt.
 
-**Arbeitsbranch:** claude/lucid-gates-69jllu · **Letzter grüner Stand:** nur Architekturtests (38 passed); Test-Schranke nicht eingerichtet (wartet auf Freigabe Q3)
+**Arbeitsbranch:** claude/lucid-gates-69jllu · **Letzter grüner Stand:** Architekturtests (38 passed); Test-Schranke nicht eingerichtet
 
 ## Ampel
-🟡 Fragen an Simon offen (Q1–Q3, E-1…E-6, F-Bilanz, F-Umfang, F-Zeitraum, F-Kontakt)
+🟡 Betriebsmodell (lokal vs. iPhone), Anmeldung, Ablage „im Repo“ offen; außerdem Bilanz, Umfang, Zeitraum, Kontakt
 
 ## Offene Fragen
 Siehe `docs/OFFENE_FRAGEN.md`.
